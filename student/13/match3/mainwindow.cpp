@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     // More code perhaps needed
     // draw_fruit();
     init_grid();
+
 }
 
 MainWindow::~MainWindow()
@@ -127,8 +128,20 @@ void MainWindow::init_grid()
 //                        newFruitData.kind = Fruit_kind(distr_(randomEng_));
 
 
+
+            newFruitData.button = new QPushButton;
+            newFruitData.button->setGeometry(i * SQUARE_SIDE,
+                                             j * SQUARE_SIDE,
+                                             SQUARE_SIDE, SQUARE_SIDE);
+            //newFruitData.button->show();
+            scene_->addWidget(newFruitData.button);
+
             newFruitData.image = new QGraphicsPixmapItem;
 
+            newFruitData.image->setZValue(10000);
+
+            connect(newFruitData.button, &QPushButton::clicked,
+                    this, [this, i, j]{MainWindow::on_fruitClick(i, j);});
 
             scene_add_item(i, j, newFruitData);
 
@@ -238,6 +251,7 @@ void MainWindow::init_3btb()
         init_3btb();
 }
 
+
 //void MainWindow::update_fruit(int x, int y)
 //{
 //    fruitItem_->setPixmap(grid[x][y].image);
@@ -294,5 +308,42 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
     }
 
 //    if (event->key() == Qt::Key_S)
-//        init_grid();
+    //        init_grid();
+}
+
+void MainWindow::on_fruitClick(int x, int y)
+{
+    qDebug() << x << y;
+
+    for (int i = 0; i < COLUMNS; i++)
+    {
+        for (int j = 0; j < ROWS; j++)
+        {
+            if (grid[i][j].clicked)
+            {
+                try_change_fruits(i, j, x, y);
+                grid[i][j].clicked = false;
+                return;
+            }
+        }
+    }
+
+    grid[x][y].clicked = true;
+}
+
+void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
+{
+    grid[x1][y1].image->moveBy(SQUARE_SIDE * (x2 - x1),
+                               SQUARE_SIDE * (y2 - y1));
+    grid[x2][y2].image->moveBy(SQUARE_SIDE * (x1 - x2),
+                               SQUARE_SIDE * (y1 - y2));
+
+
+    QGraphicsPixmapItem* tempImage = grid[x1][y1].image;
+    grid[x1][y1].image = grid[x2][y2].image;
+    grid[x2][y2].image = tempImage;
+
+    Fruit_kind tempKind = grid[x1][y1].kind;
+    grid[x1][y1].kind = grid[x2][y2].kind;
+    grid[x2][y2].kind = tempKind;
 }

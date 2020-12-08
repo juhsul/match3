@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
+#include <QPushButton>
 #include <vector>
 #include <deque>
 #include <random>
@@ -25,6 +26,7 @@ public:
     void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
+    void on_fruitClick(int x, int y);
 
 private:
     Ui::MainWindow *ui;
@@ -91,11 +93,14 @@ private:
     {
         Fruit_kind kind;
         QGraphicsPixmapItem* image;
+        QPushButton* button;
+        bool clicked = false;
     };
 
     void init_grid();
     void scene_add_item(int x, int y, Fruit_data &data, bool errorChk = false);
     void init_3btb();
+    void try_change_fruits(int x1, int y1, int x2, int y2);
 
     void update_fruit(int x, int y);
 
