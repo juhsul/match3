@@ -31,16 +31,22 @@ MainWindow::MainWindow(QWidget *parent)
     scene_->setSceneRect(0, 0, BORDER_RIGHT - 1, BORDER_DOWN - 1);
 
     int seed = time(0); // You can change seed value for testing purposes
-    seed = 9;
+    //seed = 9;
     randomEng_.seed(seed);
     distr_ = std::uniform_int_distribution<int>(0, NUMBER_OF_FRUITS - 1);
     distr_(randomEng_); // Wiping out the first random number (which is almost always 0)
 
     init_titles();
 
+    connect(ui->new_game_btn, &QPushButton::clicked,
+            this, &MainWindow::init_grid);
+    connect(ui->delay_box, &QCheckBox::stateChanged,
+            this, &MainWindow::on_delay_box_click);
+
+    ui->delay_box->setChecked(true);
     // More code perhaps needed
     // draw_fruit();
-    init_grid();
+    //init_grid();
 
 }
 
@@ -48,6 +54,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete fruitItem_;
+    delete new_game;
 }
 
 void MainWindow::init_titles()
@@ -105,13 +112,14 @@ void MainWindow::draw_fruit()
 
 void MainWindow::init_grid()
 {
-//    const std::vector<std::string>
-//            fruits = {"cherries", "strawberry", "orange", "pear",
-//                      "apple", "bananas", "grapes", "eggplant"};
-
-//    // Defining where the images can be found and what kind of images they are
-//    const std::string PREFIX(":/");
-//    const std::string SUFFIX(".png");
+    if (not(grid.empty()))
+        for (int i = 0; i < COLUMNS; i++)
+            for (int j = 0; j < ROWS; j++)
+            {
+                scene_->removeItem(grid[i][j].image);
+                delete grid[i][j].button;
+            }
+    grid.clear();
 
     for (int i = 0; i < COLUMNS; i++)
     {
@@ -120,69 +128,26 @@ void MainWindow::init_grid()
         for (int j = 0; j < ROWS; j++)
         {
             Fruit_data newFruitData;
-            //newFruitData.kind = Fruit_kind(distr_(randomEng_));
             newFruitData.kind = Fruit_kind(distr_(randomEng_));
-
-//            if (j > 1)
-//                if (columVector[j - 1].kind == columVector[j - 2].kind)
-//                    while (newFruitData.kind == columVector[j - 1].kind)
-//                        newFruitData.kind = Fruit_kind(distr_(randomEng_));
-
-
 
             newFruitData.button = new QPushButton;
             newFruitData.button->setGeometry(i * SQUARE_SIDE,
                                              j * SQUARE_SIDE,
                                              SQUARE_SIDE, SQUARE_SIDE);
-            //newFruitData.button->setStyleSheet("background-color: white");
-            //newFruitData.button->show();
             scene_->addWidget(newFruitData.button);
-
-            newFruitData.image = new QGraphicsPixmapItem;
-
-            newFruitData.image->setZValue(10000);
-
             connect(newFruitData.button, &QPushButton::clicked,
                     this, [this, i, j]{MainWindow::on_fruitClick(i, j);});
 
+            newFruitData.image = new QGraphicsPixmapItem;
+            newFruitData.image->setZValue(10000);
+
             scene_add_item(i, j, newFruitData);
 
-//            // Converting image (png) to a pixmap
-//            // int i = 0; // try different values in 0 <= i < fruits.size()
-//            std::string filename = PREFIX + fruits.at(newFruitData.kind) + SUFFIX;
-//            QPixmap image(QString::fromStdString(filename));
-
-//            // Scaling the pixmap
-//            image = image.scaled(SQUARE_SIDE, SQUARE_SIDE);
-
-//            // newFruitData.image = image;
-
-
-//            newFruitData.image->setPixmap(image);
-//            newFruitData.image->setPos(SQUARE_SIDE * i, SQUARE_SIDE * j);
-//            scene_->addItem(newFruitData.image);
-
-
-
-            // newFruitData.image = fruitItem_;
             columVector.push_back(newFruitData);
-
-            //Sleep(5);
         }
-
         grid.push_back(columVector);
     }
     init_3btb();
-
-//    for (int i = 2; i < COLUMNS; i++)
-//    {
-//        for (int j = 2; j < COLUMNS; j++)
-//        {
-//            if (grid[i][j - 1].kind == grid[i][j - 2].kind
-//                    and grid[i][j].kind == grid[i][j - 1].kind)
-
-//        }
-    //    }
 }
 
 void MainWindow::scene_add_item(int x, int y, MainWindow::Fruit_data &data,
@@ -253,66 +218,6 @@ void MainWindow::init_3btb()
         init_3btb();
 }
 
-
-//void MainWindow::update_fruit(int x, int y)
-//{
-//    fruitItem_->setPixmap(grid[x][y].image);
-//    fruitItem_->setPos(SQUARE_SIDE * x, SQUARE_SIDE * y);
-//    scene_->addItem(fruitItem_);
-//}
-
-void MainWindow::keyPressEvent(QKeyEvent* event) {
-    // changing the color of the circle between red and blue
-//    if(event->key() == Qt::Key_S)
-//    {
-//        grid[0][0].kind = Fruit_kind(0);
-//        QPixmap image(QString::fromStdString(":/apple.png"));
-//        image = image.scaled(SQUARE_SIDE, SQUARE_SIDE);
-//        grid[0][0].image = image;
-//        fruitItem_ = new QGraphicsPixmapItem;
-//        fruitItem_->setPixmap(grid[0][0].image);
-//        fruitItem_->setPos(SQUARE_SIDE * 0, SQUARE_SIDE * 0);
-//        scene_->addItem(fruitItem_);
-//    }
-
-    if (event->key() == Qt::Key_D)
-    {
-        grid[0][0].image->moveBy(SQUARE_SIDE * 1, SQUARE_SIDE * 1);
-        grid[1][1].image->moveBy(SQUARE_SIDE * -1, SQUARE_SIDE * -1);
-
-        QGraphicsPixmapItem* tempImage = grid[0][0].image;
-        grid[0][0].image = grid[1][1].image;
-        grid[1][1].image = tempImage;
-
-        Fruit_kind tempKind = grid[0][0].kind;
-        grid[0][0].kind = grid[1][1].kind;
-        grid[1][1].kind = tempKind;
-
-//        if (grid[0][0].image != grid[1][1].image)
-//        {
-//            grid[0][0].image->moveBy(5, 5);
-//            qDebug() << "eri kuva";
-//        }
-
-//        if (grid[0][0].kind != grid[1][1].kind)
-//            qDebug() << "eri kind";
-
-//        if (grid[0][0].image == grid[1][1].image)
-//        {
-//            grid[0][0].image->moveBy(5, 5);
-//            qDebug() << "sama kuva";
-//        }
-
-//        if (grid[0][0].kind == grid[1][1].kind)
-//            qDebug() << "sama kind";
-        //scene_->update();
-        //scene_->addItem(grid[1][1].image);
-    }
-
-//    if (event->key() == Qt::Key_S)
-    //        init_grid();
-}
-
 void MainWindow::on_fruitClick(int x, int y)
 {
     qDebug() << x << y;
@@ -335,12 +240,19 @@ void MainWindow::on_fruitClick(int x, int y)
     grid[x][y].button->setStyleSheet("background-color: #7899ff");
 }
 
+void MainWindow::on_delay_box_click()
+{
+    if (ui->delay_box->isChecked())
+        DELAY = 210;
+    else
+        DELAY = 0;
+}
+
 
 void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
 {
     if (x1 == x2 and y1 == y2)
     {
-        //QTimer::singleShot(500, this, SLOT(wait()));
         qDebug() << "sama paino";
         return;
     }
@@ -356,6 +268,12 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
     if (abs(x1 - x2) == 1 and abs(y1 - y2) == 1)
     {
         qDebug() << "vino";
+        return;
+    }
+
+    if (grid[x1][y1].isEmpty == true or grid[x2][y2].isEmpty == true)
+    {
+        qDebug() << "tyhjä ruutu";
         return;
     }
 
@@ -376,16 +294,13 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
     bool match = false;
 
     if (try_remove_3btb(x1, y1))
-    {
         match = true;
-    }
+
     if (try_remove_3btb(x2, y2))
-    {
         match = true;
-    }
 
     if (not(match))
-        QTimer::singleShot(150, this, [this, x1, y1, x2, y2]
+        QTimer::singleShot(DELAY, this, [this, x1, y1, x2, y2]
         {
             grid[x1][y1].image->moveBy(SQUARE_SIDE * (x2 - x1),
                                        SQUARE_SIDE * (y2 - y1));
@@ -401,6 +316,8 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
             grid[x1][y1].kind = grid[x2][y2].kind;
             grid[x2][y2].kind = tempKind;
         });
+
+    QTimer::singleShot(DELAY * 2, this, SLOT(drop_fruits()));
 }
 // TODO return bool jos ei onnistu niin saa animaation vaihdosta jos onnistuu
 // siirtyy alas putoamis hommaan
@@ -430,7 +347,7 @@ bool MainWindow::try_remove_3btb(int x, int y)
     // Vaakarivin poisto
     if (xFunc2 - xFunc1 >= 2)
     {
-        QTimer::singleShot(150, this, [this, xFunc1, xFunc2, y]
+        QTimer::singleShot(DELAY, this, [this, xFunc1, xFunc2, y]
         {delete_3btb(xFunc1, xFunc2, y, true);});
         //delete_3btb(xFunc1, xFunc2, y, true);
         returnValue = true;
@@ -455,13 +372,41 @@ bool MainWindow::try_remove_3btb(int x, int y)
     // Pystyrivin poisto
     if (yFunc2 - yFunc1 >= 2)
     {
-        QTimer::singleShot(150, this, [this, yFunc1, yFunc2, x]
+        QTimer::singleShot(DELAY, this, [this, yFunc1, yFunc2, x]
         {delete_3btb(yFunc1, yFunc2, x, false);});
         //delete_3btb(yFunc1, yFunc2, x, false);
         returnValue = true;
     }
 
     return returnValue;
+}
+
+void MainWindow::drop_fruits()
+{
+    for (int i = COLUMNS - 1; i > -1; i--)
+    {
+        for (int j = ROWS - 1; j > -1; j--)
+        {
+            int l = j;
+            if (grid[i][j].isEmpty == true)
+            {
+                for (int k = j; k > -1; k--)
+                {
+                    if (grid[i][k].isEmpty == false)
+                    {
+
+                        grid[i][k].image->moveBy(0, SQUARE_SIDE * (l - k));
+                        grid[i][l].isEmpty = false;
+                        grid[i][k].isEmpty = true;
+                        grid[i][l].image = grid[i][k].image;
+                        grid[i][l].kind = grid[i][k].kind;
+                        l--;
+                    }
+                }
+                break;
+            }
+        }
+    }
 }
 
 /* TODO: virhetarkastelu, sama paino
@@ -477,12 +422,12 @@ void MainWindow::delete_3btb(int a, int b, int static_axis, bool x_axis)
         if (x_axis)
         {
             scene_->removeItem(grid[i][static_axis].image);
-            grid[i][static_axis].empty = true;
+            grid[i][static_axis].isEmpty = true;
         }
         else
         {
             scene_->removeItem(grid[static_axis][i].image);
-            grid[static_axis][i].empty = true;
+            grid[static_axis][i].isEmpty = true;
         }
     }
 

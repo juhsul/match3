@@ -23,11 +23,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void keyPressEvent(QKeyEvent* event) override;
-
 private slots:
+    void init_grid();
     void on_fruitClick(int x, int y);
+    void on_delay_box_click();
     void delete_3btb(int a, int b, int static_axis, bool x_axis);
+    void drop_fruits();
 
 private:
     Ui::MainWindow *ui;
@@ -35,6 +36,8 @@ private:
     // Scene for the game grid
     QGraphicsScene* scene_;
     QGraphicsPixmapItem* fruitItem_;
+
+    QPushButton* new_game;
 
     QTimer timer;
 
@@ -55,6 +58,8 @@ private:
     const int BORDER_DOWN = SQUARE_SIDE * ROWS;
     const int BORDER_LEFT = 0;
     const int BORDER_RIGHT = SQUARE_SIDE * COLUMNS;
+
+    int DELAY = 210;
 
     const std::vector<std::string>
             fruits = {"cherries", "strawberry", "orange", "pear",
@@ -96,10 +101,9 @@ private:
         QGraphicsPixmapItem* image;
         QPushButton* button;
         bool clicked = false;
-        bool empty = false;
+        bool isEmpty = false;
     };
 
-    void init_grid();
     void scene_add_item(int x, int y, Fruit_data &data, bool errorChk = false);
     void init_3btb();
     void try_change_fruits(int x1, int y1, int x2, int y2);
