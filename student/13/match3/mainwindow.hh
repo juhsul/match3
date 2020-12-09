@@ -27,6 +27,7 @@ public:
 
 private slots:
     void on_fruitClick(int x, int y);
+    void delete_3btb(int a, int b, int static_axis, bool x_axis);
 
 private:
     Ui::MainWindow *ui;
@@ -95,12 +96,14 @@ private:
         QGraphicsPixmapItem* image;
         QPushButton* button;
         bool clicked = false;
+        bool empty = false;
     };
 
     void init_grid();
     void scene_add_item(int x, int y, Fruit_data &data, bool errorChk = false);
     void init_3btb();
     void try_change_fruits(int x1, int y1, int x2, int y2);
+    bool try_remove_3btb(int x, int y);
 
     void update_fruit(int x, int y);
 

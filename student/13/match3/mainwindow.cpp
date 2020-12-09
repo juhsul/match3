@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QPixmap>
 #include <vector>
+#include <cmath>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -133,6 +134,7 @@ void MainWindow::init_grid()
             newFruitData.button->setGeometry(i * SQUARE_SIDE,
                                              j * SQUARE_SIDE,
                                              SQUARE_SIDE, SQUARE_SIDE);
+            //newFruitData.button->setStyleSheet("background-color: white");
             //newFruitData.button->show();
             scene_->addWidget(newFruitData.button);
 
@@ -323,16 +325,40 @@ void MainWindow::on_fruitClick(int x, int y)
             {
                 try_change_fruits(i, j, x, y);
                 grid[i][j].clicked = false;
+                grid[i][j].button->setStyleSheet("background-color: ");
                 return;
             }
         }
     }
 
     grid[x][y].clicked = true;
+    grid[x][y].button->setStyleSheet("background-color: #7899ff");
 }
+
 
 void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
 {
+    if (x1 == x2 and y1 == y2)
+    {
+        //QTimer::singleShot(500, this, SLOT(wait()));
+        qDebug() << "sama paino";
+        return;
+    }
+
+    if (abs(x1 - x2) > 1 or abs(y1 - y2) > 1)
+    {
+
+        qDebug() << "väärä etäisyys";
+        return;
+
+    }
+
+    if (abs(x1 - x2) == 1 and abs(y1 - y2) == 1)
+    {
+        qDebug() << "vino";
+        return;
+    }
+
     grid[x1][y1].image->moveBy(SQUARE_SIDE * (x2 - x1),
                                SQUARE_SIDE * (y2 - y1));
     grid[x2][y2].image->moveBy(SQUARE_SIDE * (x1 - x2),
@@ -346,4 +372,118 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
     Fruit_kind tempKind = grid[x1][y1].kind;
     grid[x1][y1].kind = grid[x2][y2].kind;
     grid[x2][y2].kind = tempKind;
+
+    bool match = false;
+
+    if (try_remove_3btb(x1, y1))
+    {
+        match = true;
+    }
+    if (try_remove_3btb(x2, y2))
+    {
+        match = true;
+    }
+
+    if (not(match))
+        QTimer::singleShot(150, this, [this, x1, y1, x2, y2]
+        {
+            grid[x1][y1].image->moveBy(SQUARE_SIDE * (x2 - x1),
+                                       SQUARE_SIDE * (y2 - y1));
+            grid[x2][y2].image->moveBy(SQUARE_SIDE * (x1 - x2),
+                                       SQUARE_SIDE * (y1 - y2));
+
+
+            QGraphicsPixmapItem* tempImage = grid[x1][y1].image;
+            grid[x1][y1].image = grid[x2][y2].image;
+            grid[x2][y2].image = tempImage;
+
+            Fruit_kind tempKind = grid[x1][y1].kind;
+            grid[x1][y1].kind = grid[x2][y2].kind;
+            grid[x2][y2].kind = tempKind;
+        });
+}
+// TODO return bool jos ei onnistu niin saa animaation vaihdosta jos onnistuu
+// siirtyy alas putoamis hommaan
+bool MainWindow::try_remove_3btb(int x, int y)
+{
+    int xFunc1 = x;
+    int xFunc2 = x;
+    int yFunc1 = y;
+    int yFunc2 = y;
+    bool returnValue = false;
+
+    for (int i = x; grid[x][y].kind == grid[i][y].kind; i--)
+    {
+        if (i == 0){
+            xFunc1 = i;
+            break;}
+        xFunc1 = i;
+    }
+    for (int i = x; grid[x][y].kind == grid[i][y].kind; i++)
+    {
+        if (i == COLUMNS - 1){
+            xFunc2 = i;
+            break;}
+        xFunc2 = i;
+    }
+
+    // Vaakarivin poisto
+    if (xFunc2 - xFunc1 >= 2)
+    {
+        QTimer::singleShot(150, this, [this, xFunc1, xFunc2, y]
+        {delete_3btb(xFunc1, xFunc2, y, true);});
+        //delete_3btb(xFunc1, xFunc2, y, true);
+        returnValue = true;
+
+    }
+
+    for (int i = y; grid[x][y].kind == grid[x][i].kind; i--)
+    {
+        if (i == 0){
+            yFunc1 = i;
+            break;}
+        yFunc1 = i;
+    }
+    for (int i = y; grid[x][y].kind == grid[x][i].kind; i++)
+    {
+        if (i == ROWS - 1){
+            yFunc2 = i;
+            break;}
+        yFunc2 = i;
+    }
+
+    // Pystyrivin poisto
+    if (yFunc2 - yFunc1 >= 2)
+    {
+        QTimer::singleShot(150, this, [this, yFunc1, yFunc2, x]
+        {delete_3btb(yFunc1, yFunc2, x, false);});
+        //delete_3btb(yFunc1, yFunc2, x, false);
+        returnValue = true;
+    }
+
+    return returnValue;
+}
+
+/* TODO: virhetarkastelu, sama paino
+ * tai ei vierekkäin paino, jos vaihto niin poisto jos yli 3 ja tiputus alas
+ * timerin kanssa -> ei saa olla välitön.
+*/
+
+void MainWindow::delete_3btb(int a, int b, int static_axis, bool x_axis)
+{
+
+    for (int i = b; i >= a; i--)
+    {
+        if (x_axis)
+        {
+            scene_->removeItem(grid[i][static_axis].image);
+            grid[i][static_axis].empty = true;
+        }
+        else
+        {
+            scene_->removeItem(grid[static_axis][i].image);
+            grid[static_axis][i].empty = true;
+        }
+    }
+
 }
