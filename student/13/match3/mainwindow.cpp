@@ -13,22 +13,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // We need a graphics scene in which to draw rectangles
-    scene_ = new QGraphicsScene(this);
+//    // We need a graphics scene in which to draw rectangles
+    //scene_ = new QGraphicsScene(this);
 
-    // The width of the graphicsView is BORDER_RIGHT added by 2,
-    // since the borders take one pixel on each side
-    // (1 on the left, and 1 on the right).
-    // Similarly, the height of the graphicsView is BORDER_DOWN added by 2.
-    ui->graphicsView->setGeometry(LEFT_MARGIN, TOP_MARGIN,
-                                  BORDER_RIGHT + 2, BORDER_DOWN + 2);
-    ui->graphicsView->setScene(scene_);
+//    // The width of the graphicsView is BORDER_RIGHT added by 2,
+//    // since the borders take one pixel on each side
+//    // (1 on the left, and 1 on the right).
+//    // Similarly, the height of the graphicsView is BORDER_DOWN added by 2.
+    //ui->graphicsView->setGeometry(LEFT_MARGIN, TOP_MARGIN,
+                                  //BORDER_RIGHT + 2, BORDER_DOWN + 2);
+    //ui->graphicsView->setScene(scene_);
 
-    // The width of the scene_ is BORDER_RIGHT decreased by 1 and
-    // the height of it is BORDER_DOWN decreased by 1, because
-    // each square of a fruit is considered to be inside the sceneRect,
-    // if its upper left corner is inside the sceneRect.
-    scene_->setSceneRect(0, 0, BORDER_RIGHT - 1, BORDER_DOWN - 1);
+//    // The width of the scene_ is BORDER_RIGHT decreased by 1 and
+//    // the height of it is BORDER_DOWN decreased by 1, because
+//    // each square of a fruit is considered to be inside the sceneRect,
+//    // if its upper left corner is inside the sceneRect.
+    //scene_->setSceneRect(0, 0, BORDER_RIGHT - 1, BORDER_DOWN - 1);
 
     int seed = time(0); // You can change seed value for testing purposes
     //seed = 9;
@@ -43,7 +43,34 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->delay_box, &QCheckBox::stateChanged,
             this, &MainWindow::on_delay_box_click);
 
+    connect(ui->horizontal_slider_x, &QSlider::valueChanged,
+            this, &MainWindow::on_slider_change);
+    connect(ui->horizontal_slider_y, &QSlider::valueChanged,
+            this, &MainWindow::on_slider_change);
+    connect(ui->horizontal_slider_delay, &QSlider::valueChanged,
+            this, &MainWindow::on_slider_change_delay);
+
+    ui->horizontal_slider_x->setMaximum(MAX_COLUMNS);
+    ui->horizontal_slider_y->setMaximum(MAX_ROWS);
+    ui->horizontal_slider_x->setMinimum(MIN_COLUMNS);
+    ui->horizontal_slider_y->setMinimum(MIN_ROWS);
+    ui->horizontal_slider_delay->setMaximum(MAX_DELAY);
+    ui->horizontal_slider_delay->setMinimum(MIN_DELAY);
+
+    ui->horizontal_slider_x->setValue(15);
+    ui->horizontal_slider_y->setValue(10);
+    ui->horizontal_slider_delay->setValue(250);
+
     ui->delay_box->setChecked(true);
+
+    timer = new QTimer();
+    timer->setInterval(1000);
+    connect(timer, &QTimer::timeout, this, &MainWindow::on_timeout_game_time);
+    QFont font_label_time = ui->label_time->font();
+    font_label_time.setPointSize(15);
+    ui->label_time->setFont(font_label_time);
+    ui->label_time_title->setFont(font_label_time);
+
     // More code perhaps needed
     // draw_fruit();
     //init_grid();
@@ -56,6 +83,7 @@ MainWindow::~MainWindow()
     delete fruitItem_;
     delete new_game;
 }
+// TODO putoamisen seurauksena 3 vierekkäin
 
 void MainWindow::init_titles()
 {
@@ -112,19 +140,44 @@ void MainWindow::draw_fruit()
 
 void MainWindow::init_grid()
 {
-    if (not(grid.empty()))
-        for (int i = 0; i < COLUMNS; i++)
-            for (int j = 0; j < ROWS; j++)
-            {
-                scene_->removeItem(grid[i][j].image);
-                delete grid[i][j].button;
-            }
+    seconds = 0;
+    minutes = 0;
+    timer->stop();
+    ui->label_time->setText(QString::fromStdString("0:0"));
+
+    qDebug() << "nappi pois";
+    ui->new_game_btn->setDisabled(true);
+
+    if (number_of_games > 0)
+        delete scene_;
+    number_of_games++;
+
+    scene_ = new QGraphicsScene(this);
+    scene_->update();
+
+    ui->graphicsView->setGeometry(LEFT_MARGIN, TOP_MARGIN,
+                                  SQUARE_SIDE * COLUMNS + 2,
+                                  SQUARE_SIDE * ROWS + 2);
+
+    ui->graphicsView->setScene(scene_);
+
+    scene_->setSceneRect(0, 0, SQUARE_SIDE * COLUMNS - 1,
+                         SQUARE_SIDE * ROWS - 1);
+
+
+//    if (not(grid.empty()))
+//        for (int i = 0; i < COLUMNS; i++)
+//            for (int j = 0; j < ROWS; j++)
+//            {
+//                scene_->removeItem(grid[i][j].image);
+//                delete grid[i][j].button;
+//            }
     grid.clear();
+    std::vector<Fruit_data> columVector;
 
     for (int i = 0; i < COLUMNS; i++)
     {
-        std::vector<Fruit_data> columVector;
-
+        columVector.clear();
         for (int j = 0; j < ROWS; j++)
         {
             Fruit_data newFruitData;
@@ -148,6 +201,15 @@ void MainWindow::init_grid()
         grid.push_back(columVector);
     }
     init_3btb();
+//    QTimer::singleShot(100, this, [this]
+//    {
+//        ui->new_game_btn->setEnabled(true);
+//    });
+
+    ui->new_game_btn->setEnabled(true);
+
+    qDebug() << "nappi päälle";
+    timer->start();
 }
 
 void MainWindow::scene_add_item(int x, int y, MainWindow::Fruit_data &data,
@@ -168,7 +230,7 @@ void MainWindow::scene_add_item(int x, int y, MainWindow::Fruit_data &data,
     // newFruitData.image = image;
 
 
-    qDebug() << x << " " << y;
+    //qDebug() << x << " " << y;
     data.image->setPixmap(image);
     data.image->setPos(SQUARE_SIDE * x, SQUARE_SIDE * y);
     scene_->addItem(data.image);
@@ -177,6 +239,7 @@ void MainWindow::scene_add_item(int x, int y, MainWindow::Fruit_data &data,
 void MainWindow::init_3btb()
 {
     bool correction = false;
+    int number_of_corrections = 0;
 
     for (int i = 0; i < COLUMNS; i++)
     {
@@ -187,8 +250,14 @@ void MainWindow::init_3btb()
             {
                 while (grid[i][j].kind == grid[i][j - 1].kind)
                 {
+                    if (number_of_corrections > 100)
+                    {
+                        init_grid();
+                        return;
+                    }
                     correction = true;
                     grid[i][j].kind = Fruit_kind(distr_(randomEng_));
+                    number_of_corrections++;
                 }
 
                 scene_add_item(i, j, grid[i][j], true);
@@ -205,8 +274,14 @@ void MainWindow::init_3btb()
             {
                 while (grid[i][j].kind == grid[i - 1][j].kind)
                 {
+                    if (number_of_corrections > 100)
+                    {
+                        init_grid();
+                        return;
+                    }
                     correction = true;
                     grid[i][j].kind = Fruit_kind(distr_(randomEng_));
+                    number_of_corrections++;
                 }
 
                 scene_add_item(i, j, grid[i][j], true);
@@ -220,7 +295,9 @@ void MainWindow::init_3btb()
 
 void MainWindow::on_fruitClick(int x, int y)
 {
-    qDebug() << x << y;
+    enable_buttons(false);
+
+    qDebug() << "nappi pois alku";
 
     for (int i = 0; i < COLUMNS; i++)
     {
@@ -231,6 +308,8 @@ void MainWindow::on_fruitClick(int x, int y)
                 try_change_fruits(i, j, x, y);
                 grid[i][j].clicked = false;
                 grid[i][j].button->setStyleSheet("background-color: ");
+
+                qDebug() << "nappi takas testin jälkeen";
                 return;
             }
         }
@@ -238,14 +317,17 @@ void MainWindow::on_fruitClick(int x, int y)
 
     grid[x][y].clicked = true;
     grid[x][y].button->setStyleSheet("background-color: #7899ff");
+    enable_buttons(true);
+
+    qDebug() << "nappi takas ensimmäinen klikki";
 }
 
 void MainWindow::on_delay_box_click()
 {
     if (ui->delay_box->isChecked())
-        DELAY = 210;
+        delay = DELAY_CONST;
     else
-        DELAY = 0;
+        delay = 0;
 }
 
 
@@ -254,6 +336,7 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
     if (x1 == x2 and y1 == y2)
     {
         qDebug() << "sama paino";
+        enable_buttons(true);
         return;
     }
 
@@ -261,6 +344,7 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
     {
 
         qDebug() << "väärä etäisyys";
+        enable_buttons(true);
         return;
 
     }
@@ -268,12 +352,14 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
     if (abs(x1 - x2) == 1 and abs(y1 - y2) == 1)
     {
         qDebug() << "vino";
+        enable_buttons(true);
         return;
     }
 
     if (grid[x1][y1].isEmpty == true or grid[x2][y2].isEmpty == true)
     {
         qDebug() << "tyhjä ruutu";
+        enable_buttons(true);
         return;
     }
 
@@ -300,7 +386,7 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
         match = true;
 
     if (not(match))
-        QTimer::singleShot(DELAY, this, [this, x1, y1, x2, y2]
+        QTimer::singleShot(delay, this, [this, x1, y1, x2, y2]
         {
             grid[x1][y1].image->moveBy(SQUARE_SIDE * (x2 - x1),
                                        SQUARE_SIDE * (y2 - y1));
@@ -315,9 +401,18 @@ void MainWindow::try_change_fruits(int x1, int y1, int x2, int y2)
             Fruit_kind tempKind = grid[x1][y1].kind;
             grid[x1][y1].kind = grid[x2][y2].kind;
             grid[x2][y2].kind = tempKind;
+
+            enable_buttons(true);
+            return;
         });
 
-    QTimer::singleShot(DELAY * 2, this, SLOT(drop_fruits()));
+    else
+        QTimer::singleShot(delay * 2, this, [this]
+        {
+            drop_fruits();
+            enable_buttons(true);
+        });
+
 }
 // TODO return bool jos ei onnistu niin saa animaation vaihdosta jos onnistuu
 // siirtyy alas putoamis hommaan
@@ -331,6 +426,8 @@ bool MainWindow::try_remove_3btb(int x, int y)
 
     for (int i = x; grid[x][y].kind == grid[i][y].kind; i--)
     {
+        if (grid[i][y].isEmpty)
+            break;
         if (i == 0){
             xFunc1 = i;
             break;}
@@ -338,6 +435,8 @@ bool MainWindow::try_remove_3btb(int x, int y)
     }
     for (int i = x; grid[x][y].kind == grid[i][y].kind; i++)
     {
+        if (grid[i][y].isEmpty)
+            break;
         if (i == COLUMNS - 1){
             xFunc2 = i;
             break;}
@@ -347,7 +446,7 @@ bool MainWindow::try_remove_3btb(int x, int y)
     // Vaakarivin poisto
     if (xFunc2 - xFunc1 >= 2)
     {
-        QTimer::singleShot(DELAY, this, [this, xFunc1, xFunc2, y]
+        QTimer::singleShot(delay, this, [this, xFunc1, xFunc2, y]
         {delete_3btb(xFunc1, xFunc2, y, true);});
         //delete_3btb(xFunc1, xFunc2, y, true);
         returnValue = true;
@@ -356,6 +455,8 @@ bool MainWindow::try_remove_3btb(int x, int y)
 
     for (int i = y; grid[x][y].kind == grid[x][i].kind; i--)
     {
+        if (grid[x][i].isEmpty)
+            break;
         if (i == 0){
             yFunc1 = i;
             break;}
@@ -363,6 +464,8 @@ bool MainWindow::try_remove_3btb(int x, int y)
     }
     for (int i = y; grid[x][y].kind == grid[x][i].kind; i++)
     {
+        if (grid[x][i].isEmpty)
+            break;
         if (i == ROWS - 1){
             yFunc2 = i;
             break;}
@@ -372,13 +475,20 @@ bool MainWindow::try_remove_3btb(int x, int y)
     // Pystyrivin poisto
     if (yFunc2 - yFunc1 >= 2)
     {
-        QTimer::singleShot(DELAY, this, [this, yFunc1, yFunc2, x]
+        QTimer::singleShot(delay, this, [this, yFunc1, yFunc2, x]
         {delete_3btb(yFunc1, yFunc2, x, false);});
         //delete_3btb(yFunc1, yFunc2, x, false);
         returnValue = true;
     }
 
     return returnValue;
+}
+
+void MainWindow::enable_buttons(bool enable)
+{
+    for (int i = 0; i < COLUMNS; i++)
+        for (int j =0; j < ROWS; j++)
+            grid[i][j].button->setEnabled(enable);
 }
 
 void MainWindow::drop_fruits()
@@ -408,6 +518,40 @@ void MainWindow::drop_fruits()
         }
     }
 }
+
+void MainWindow::on_slider_change()
+{
+    COLUMNS = ui->horizontal_slider_x->value();
+    ROWS = ui->horizontal_slider_y->value();
+
+    ui->label_x->setText(QString::number(ui->horizontal_slider_x->value()));
+    ui->label_y->setText(QString::number(ui->horizontal_slider_y->value()));
+}
+
+void MainWindow::on_slider_change_delay()
+{
+    DELAY_CONST = ui->horizontal_slider_delay->value();
+    delay = DELAY_CONST;
+    ui->label_delay->setText(QString::number
+                             (ui->horizontal_slider_delay->value()));
+}
+
+void MainWindow::on_timeout_game_time()
+{
+    seconds++;
+    ui->label_time->setText(QString::fromStdString
+                             (std::to_string(minutes) + ":"
+                              + std::to_string(seconds)));
+    if (seconds == 59)
+    {
+        minutes++;
+        seconds = -1;
+    }
+}
+
+
+
+
 
 /* TODO: virhetarkastelu, sama paino
  * tai ei vierekkäin paino, jos vaihto niin poisto jos yli 3 ja tiputus alas

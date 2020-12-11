@@ -29,6 +29,9 @@ private slots:
     void on_delay_box_click();
     void delete_3btb(int a, int b, int static_axis, bool x_axis);
     void drop_fruits();
+    void on_slider_change();
+    void on_slider_change_delay();
+    void on_timeout_game_time();
 
 private:
     Ui::MainWindow *ui;
@@ -39,7 +42,7 @@ private:
 
     QPushButton* new_game;
 
-    QTimer timer;
+    QTimer* timer;
 
     // Margins for the drawing area (the graphicsView object)
     // You can change the values as you wish
@@ -49,21 +52,26 @@ private:
     // Size of a square containing a fruit
     const int SQUARE_SIDE = 40; // give your own value here
     // Number of vertical cells (places for fruits)
-    const int ROWS = 10; // give your own value here
+    int ROWS = 10; // give your own value here
     // Number of horizontal cells (places for fruits)
-    const int COLUMNS = 15; // give your own value here
+    int COLUMNS = 15; // give your own value here
+    const int MAX_ROWS = 20;
+    const int MAX_COLUMNS = 30;
+    const int MIN_ROWS = 5;
+    const int MIN_COLUMNS = 5;
 
     // Constants describing scene coordinates
     const int BORDER_UP = 0;
-    const int BORDER_DOWN = SQUARE_SIDE * ROWS;
     const int BORDER_LEFT = 0;
-    const int BORDER_RIGHT = SQUARE_SIDE * COLUMNS;
 
-    int DELAY = 210;
+    int delay;
+    int DELAY_CONST = 250;
+    const int MAX_DELAY = 1000;
+    const int MIN_DELAY = 50;
 
     const std::vector<std::string>
             fruits = {"cherries", "strawberry", "orange", "pear",
-                      "apple", "bananas", "grapes", "eggplant"};
+                      "apple", /*"bananas",*/ "grapes", "eggplant"};
 
     // Defining where the images can be found and what kind of images they are
     const std::string PREFIX = ":/";
@@ -78,7 +86,7 @@ private:
                      ORANGE,
                      PEAR,
                      APPLE,
-                     BANANAS,
+                     //BANANAS,
                      GRAPES,
                      EGGPLANT,
                      NUMBER_OF_FRUITS};
@@ -111,6 +119,11 @@ private:
 
     void update_fruit(int x, int y);
 
+    void enable_buttons(bool enable);
+
+    int number_of_games = 0;
+    int seconds;
+    int minutes;
 
     std::vector<std::vector<Fruit_data>> grid;
 };
