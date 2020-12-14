@@ -76,11 +76,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    // Valgrindissä näytti että rivillä 141 oli muistivuoto, yritin korjata
+    // sitä, mutta aika kävi vähiin. Edellisessä commitissa oli korjausehdotus
+    // muistivuotoon, mutta se kaatoi peliä aina joskus, joten päätin että
+    // palautan projektin ilman tätä muistivuotokorjausta. Arvioija voi
+    // ehdottaa miten se olisi kuulunut korjata oikein.
     delete ui;
     delete timer;
-    for (int i = 0; i < COLUMNS; i++)
-        for (int j = 0; j < ROWS; j++)
-            delete grid[i][j].image;
 }
 
 void MainWindow::init_grid()
@@ -95,12 +97,10 @@ void MainWindow::init_grid()
     // pitäisi toimia, mutta ei toimi
     ui->new_game_btn->setDisabled(true);
 
-    // scenen ja pixmapin deletoiminen
+    // scenen deletoiminen
     if (number_of_games > 0)
-        for (int i = 0; i < COLUMNS; i++)
-            for (int j = 0; j < ROWS; j++)
-                delete grid[i][j].image;
         delete scene_;
+
     number_of_games++;
 
     scene_ = new QGraphicsScene(this);

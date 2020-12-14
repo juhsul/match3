@@ -15,7 +15,8 @@ Hedelmien liikutus tapahtuu painamalla niit‰ hiirell‰. Ensiksi painat hedelm‰‰,
 jota haluat liikuttaa ja sen alle syttyy sininen valo. Sen j‰lkeen painat 
 jotain toista hedelm‰‰, joka on ensimm‰isen hedelm‰n vieress‰ tai p‰‰ll‰. 
 Ellei toinen hedelm‰ ole ensimm‰isen vieress‰ tai p‰‰ll‰ tai toinen on tyhj‰, 
-mit‰‰n ei tapahtu.
+mit‰‰n ei tapahtu. Jos liikutuksen seurauksena ei synny v‰hint‰‰n kolmen 
+pituista hedelm‰jonoa, niin ei tapahdu mit‰‰n.
 
 Uusi peli:
 Uuden pelin voi aloittaa painamalla Uusi peli -nappia. Voit halutettasi s‰‰t‰‰ 
