@@ -1,0 +1,227 @@
+--------------------------------------------------------------------------------
+K‰yttˆohjeet:
+
+Pelin tarkoituksena on yhdist‰‰ pelialueella olevia hedelmi‰ niin, ett‰ ne 
+muodostavat vaakatasossa tai pystytasossa kolmen tai pidemm‰n kokoisen jonon. 
+Pelin voi aloittaa painamalla "Uusi peli" -nappia, jolloin pelialueelle 
+muodostuu hedelmi‰. Hedelmi‰ voi liikutella painamalla niit‰. Jos pelaaja saa 
+yhdistetty‰ kolme tai enemm‰n hedelm‰‰ per‰kk‰in, ne poistetaan ja tippuu 
+ylh‰‰ll‰ olevat hedelm‰t alasp‰in. Yhdell‰ liikutuksella voi poistaa useampia 
+hedelm‰rypp‰it‰. Myˆs putoavat hedelm‰t voivat pudotessaan muodostaa kolmen 
+rivej‰ ja ne poistuvat myˆs samalla kertaa.
+
+Hedelmien liikutus:
+Hedelmien liikutus tapahtuu painamalla niit‰ hiirell‰. Ensiksi painat hedelm‰‰, 
+jota haluat liikuttaa ja sen alle syttyy sininen valo. Sen j‰lkeen painat 
+jotain toista hedelm‰‰, joka on ensimm‰isen hedelm‰n vieress‰ tai p‰‰ll‰. 
+Ellei toinen hedelm‰ ole ensimm‰isen vieress‰ tai p‰‰ll‰ tai toinen on tyhj‰, 
+mit‰‰n ei tapahtu.
+
+Uusi peli:
+Uuden pelin voi aloittaa painamalla Uusi peli -nappia. Voit halutettasi s‰‰t‰‰ 
+myˆs pelialueen koon, erilaisten hedelmien m‰‰r‰n ja viiveen. Pelialueen koko 
+ja erilaisten hedelmien m‰‰r‰ p‰ivittyy vasta kun olet aloittanut uuden pelin 
+s‰‰tˆjen j‰lkeen. Viivett‰ voi s‰‰t‰‰ pelin aikana.
+
+Asetusten s‰‰t‰minen:
+Asetuksia voi s‰‰t‰‰ peli-ikkunan yl‰osasta. Leveys ja korkeus s‰‰t‰v‰t 
+pelialueen mittoja. Hedelm‰t -slideri s‰‰t‰‰ erilaisten hedelmien m‰‰r‰‰ 
+pelialueella. Mit‰ enemm‰n erilaisia hedelmi‰ on, sit‰ vaikeampi peli on. 
+Viivett‰ voi s‰‰t‰‰ viive -sliderist‰. Viive vaikuttaa v‰littˆm‰sti s‰‰dˆn 
+j‰lkeen. Viiveen voi myˆs kokonaan ottaa pois p‰‰lt‰. Painamalla 
+valintaruudusta. Kun peli k‰ynnistet‰‰n ensimm‰ist‰ kertaa on pelialueen mitat 
+15x10, joka on suositeltu koko. Kokoa voi muuttaa aina 45x20 asti, joka t‰ytt‰‰ 
+fullHD resoluutioisen n‰ytˆn kokonaan.
+
+Aika:
+Asetusten vieress‰ n‰kyy peliin kulunut aika. Aika nollaantuu aina uuden 
+pelin alussa.
+
+Huomioita pelaajille:
+Huonolla tietokoneella 45x20 kokoisen ruudukon luomiseen pienimm‰ll‰ 
+mahdollisella hedelmien m‰‰r‰ll‰ voi menn‰ muutamia sekunteja tai kymmeni‰ 
+sekunteja.
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Toiminta:
+Pelialue koostuu hedelmist‰, joiden alla on nappi joita voi painaa.
+
+Alussa kun peli on k‰ynnistetty ja uusi peli luotu voi hedelmi‰ siirrell‰. 
+Hedelmien siirtely voi johtaa kolmeen eri lopputulokseen:
+	-Virheellinen siirto
+		Jos liikuteltavat hedelm‰t eiv‰t ole vierekk‰in tai toinen on 
+		tyhj‰, ei tapahdu mit‰‰n.
+	-Siirto ilman matchia
+		Jos hedelmi‰ pystyy siit‰m‰‰n, mutta matchia ei tule, niin 
+		hedelm‰t vaihtavat viiveen ajaksi paikkaa, ja palaavat taas 
+		viiveen j‰lkeen takaisi alkuper‰isille paikoilleen. T‰m‰n 
+		liikutuksen aikana ei voi liikutella muita hedelmi‰, eli 
+		pelialueen napit eiv‰t ole k‰ytˆss‰.
+	-Siirto matchilla
+		Jos siirron seurauksena tulee match, niin vaihtavat hedelm‰t 
+		viiveen ajaksi paikkaa. T‰m‰n j‰lkeen hedelm‰t, joita on 
+		jonossa useampi kuin kolme poistetaan. Hedelmi‰ voi poistaa 
+		yhdell‰ kerralla useampia. Voi myˆs poistaa samalla kertaa
+		pystysuoran ja vaakasuoran rivin jos saa samanlaisen hedelm‰n
+		niiden kulmaan. Esimerkit alla
+			Useampi kerralla (O-kirjaimet esitt‰v‰t yhdenlaisia
+			hedelmi‰ ja X-kirjaimet toisenlaisia):
+			-----		-----
+			-OXO-		-OOO-
+			-XOX-	-->	-XXX-
+			-----		-----
+			Pystysuora ja vaakasuora yhdell‰ kertaa:
+			-----		-----
+			OOXO-		OOOX-
+			--O--	-->	--O--
+			--O--		--O--
+			-----		-----
+		Hedelmien poiston j‰lkeen j‰‰ poistettu alue tyhj‰ksi viiveen
+		ajaksi. Viiveen j‰lkeen tippuvat ylh‰‰ll‰ olevat hedelm‰t alas
+		p‰in. Tiputuksen j‰lkeen tarkastetaan syntyikˆ tiputuksessa 
+		matcheja. Jos syntyi ne poistetaan ja tiputetaan uudestaan.
+		Tarkastus matcheista tiputuksen j‰lkeen jatkuu kunnes niit‰
+		ei en‰‰ ole. T‰m‰n koko ajan ovat pelialueen nappulat pois
+		p‰‰lt‰, eli ei voi siirrell‰ muita hedelmi‰.
+Uusi peli -nappi:
+	Uusi peli nappi luo uuden QGraphicsScenen, joka on annettujan mittojen 
+	kokoinen. Luo scenelle hedelm‰t satunnaisesti ja tarkastaa, ett‰ 
+	ei ole per‰kkk‰in kolmea hedelm‰‰. Nollaa ajastimen. Alunperin halusin
+	uusi peli napille tehd‰ sp‰mm‰ys-eston, mutta en onnistunut. 
+	Kooditoriossa kysyin assarilta neuvoa, ja h‰nk‰‰n ei osannut auttaa, 
+	joten ei kannata sp‰mm‰t‰ ett‰ ei j‰‰ jumiin.
+Sliderit:
+	Leveys:
+		S‰‰t‰‰ muuttujaa COLUMNS
+	Korkeus:
+		S‰‰t‰‰ muuttujaa ROWS
+	Hedelm‰t:
+		S‰‰t‰‰ muuttujaa number_of_fruits, joka vaikuttaa erilaisten
+		hedelmien m‰‰r‰‰n pelialueella.
+	Viive:
+		S‰‰t‰‰ viivett‰. Viiveen aika on se joka tapahtuu yhden 
+		siirtym‰ tapahtuman aikana. Hedelmien vaihdon seurauksena
+		voi tapahtua monta siirto tapahtumaa. Eli esim. jos 
+		tiputuksessa syntyy matcheja, niin hedelmien siirrosta 
+		seuraavaan siirron alkuun ei aina ole sama aika.
+Viive check box:
+	Voi kytke‰ viiveen kokonaan pois p‰‰lt‰.
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Ohjelman rakenne:
+
+Ohjelma koostuu monesta funktiosta, joista hedelmien liikuttelun kannalta on 
+kaksi "p‰‰funktiota", jotka suorittavat suuren osan asioista ja ne kutsuvat 
+muita funktioita. N‰m‰ ovat:
+	init_grid
+	on_fruit_click
+N‰m‰ funktiot kutsuvat seuraavia funktioita:
+	init_grid
+		scene_add_item
+		init_3btb
+			scene_add_item
+	on_fruit_click
+		enable_buttons
+		try_change_fruits
+			try_remove_3btb
+				delete_3btb
+		drop_fruits
+			try_remove_3btb
+				delete_3btb
+Pieni kuvaus funktioista:
+init_grid:
+	Uusi peli-nappulaa painettaessa nollaa ajastimen, luo scenen, 
+	hedelm‰t ja hedelmien alle nappulat. Lopuksi tarkastaa onko 
+	"matcheja" syntynyt jo luontivaiheessa. Jos on niin korjaa 
+	tilanteen. Funktion alussa ja lopussa ovat aikaisemmin kertomani
+	sp‰mm‰ys-esto koodit tallella, mutta ne eiv‰t toimi. Assarilta
+	kysyin neuvoa korjaamiseen, mutta ei saatu toimimaan ja sanoi ett‰
+	on pieni vika.
+scene_add_item:
+	Lis‰‰ sceneen kuvan
+init_3btb
+	Tarkkastaa onko luontivaiheessa tullut valmiiksi kolmea per‰kk‰ist‰. 
+	Jos on niin luo tilalle uuden hedelm‰n. Jos korjaus on tehty, niin 
+	tarkastetaan uudelleen onko per‰kk‰isi‰ kolmea hedelm‰‰. 
+	Uudelleentarkastus tehd‰‰n niin kauan, kun ei en‰‰ lˆydy per‰kk‰isi‰ 
+	kolmea. T‰ll‰ saadaan poissulkea korjauksessa tapahtuneet virheelliset 
+	korjaukset. Virheellisi‰ korjauksia voi tulla, koska tarkastus tehd‰‰n 
+	ensin vaakarivill‰, sen j‰lkeen pystyrivill‰, joten jos pystyrivilt‰ 
+	korjaa, voi vahingossa luoda vaakariville matchin.
+on_fruit_click
+	Ottaa pelialueen nappulat pois p‰‰lt‰ ja palauttaa ne vasta kun 
+	pelialuetta voi taas siirrell‰. Tarkastaa onko joku pelialueen 
+	napeista jo painettu entuudeltaan, jos ei ole, niin merkitsee
+	kyseisen napin painetuksi. Jos lˆytyy aikaisemmin painettu
+	kutsuu funktiota try_change_fruits
+try_change_fruits
+	Tarkastaa onko painetut painallukset laillisia. Jos on vaihtaa 
+	hedelmien paikkkaa. Kutsuu funktiota try_remove_3btb. T‰m‰n 
+	funktion paluuarvolla, joko siirret‰‰n hedelm‰t takaisin 
+	alkuper‰isille paikoilleen tai jatketaan pudotukseen.
+try_remove_fruits
+	Laskee onko kolmea samaa hedelm‰‰ vierekk‰in, jos on niin kutsuu
+	funktiota delete_3btb.
+delete_3btb
+	Poistaa hedelm‰t
+drop_fruits
+	K‰y l‰pi kaikki sarakkeet ja pudottaa hedelm‰t. T‰m‰n j‰lkeen 
+	tarkastaa onko uusia matcheja.
+		
+Lis‰ksi on muutama funktio tai slotti widgeteille.
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Lis‰ominaisuudet:
+2. Viiveen valitseminen
+3. Mahdollisuus valita peliruudukon koko
+4. Pelin aikana kerrotaan siihen menness‰ kulunut aika
+6. Jos vaihdon seurauksena lˆytyy enemm‰n kuin kolme samanlaista hedelm‰‰
+8. Peliasetelman voi palauttaa alkutilanteeseen
+10. Neliˆiden sijasta hedelm‰t n‰ytt‰v‰t oikkeilta hedelmilt‰
+11. Vaihdettavat hedelm‰t valitaan klikkaamalla niit‰
+
+Lis‰ominaisuutena myˆs tein hedelmien m‰‰r‰n valitsemisen, vaikka sit‰ ei ollut 
+lis‰ominaisuuksien listalla. K‰sitykseni mukaan myˆs pudotuksen j‰lkeinen
+matchien tarkastelu on jonkinlainen ekstra. Perusvaatimuksissa ei n‰kynyt 
+mainintaa siit‰, eik‰ myˆsk‰‰n lis‰ominaisuuksien listalla.
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Suunnittelup‰‰tˆkset:
+
+Mit‰‰n varsinaisia suunnitelmia en tehnyt projektista. L‰hdin hyvill‰ mielin 
+v‰h‰n testailemaan viikkoa ennen projektin palautusta, ett‰ mitenkˆh‰n se 
+l‰htisi liikkeelle ja aloitin hedelmien laittamisesta peliruudulle. 
+Myˆhemmin huomasin, ett‰ se ei ollut edes pakollinen vaatimus. Jatkoin eteen 
+p‰in yksi vaihe kerrallaan. Nyt kun t‰t‰ kirjoittaa ja myˆskin ohjelmointi-
+vaiheissa huomasi ett‰ pieni suunnittelu funktioiden kanssa olisi ollut 
+ihan hyv‰ksi, mutta ei se nytk‰‰n paha ole omasta mielest‰ni. Myˆskin kun 
+ollaan kuitenkin opettelemassa vasta ohjelmointia, niin ehk‰ lopullinen 
+toteutus ja tieto siit‰ mink‰lainen ohjelma tulee olemaan rakenteeltaan 
+ei ihan heti ole mieless‰. Mutta tulevaisuutta ajatellen suunnittelu ja 
+teht‰v‰nannon lukeminen kunnolla ei ainakaan haittaa. Voi olla jopa 
+hyˆdyksi. Kommentoinnin hyˆdytkin tuli huomattua itse. Kun t‰t‰ projektia 
+on nyt tullu tehty‰ useampi p‰iv‰, niin siin‰ kerke‰‰ unohtamaan jo mit‰ 
+jotkut koodinp‰tk‰t tekee. Yleens‰ projektit on tullut tehty‰ yhdess‰ 
+p‰iv‰ss‰ ja ne ovat olleet lyhyempi‰, niin siin‰ muistaa aika hyvin mit‰ 
+kaikki tekee ja kommentoi vasta lopuksi ett‰ saa pisteet. T‰ss‰ kun rivej‰ 
+on p‰‰lle 500 niin kerke‰‰ jo unohtamaan oman koodin ja pit‰‰ mietti‰ 
+uudestaan ett‰ voi laittaa kommentit.
