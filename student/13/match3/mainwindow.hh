@@ -25,13 +25,14 @@ public:
 
 private slots:
     void init_grid();
-    void on_fruitClick(int x, int y);
+    void on_fruit_click(int x, int y);
     void on_delay_box_click();
     void delete_3btb(int a, int b, int static_axis, bool x_axis);
     void drop_fruits();
     void on_slider_change();
     void on_slider_change_delay();
     void on_timeout_game_time();
+    void on_slider_change_fruits();
 
 private:
     Ui::MainWindow *ui;
@@ -47,7 +48,7 @@ private:
     // Margins for the drawing area (the graphicsView object)
     // You can change the values as you wish
     const int TOP_MARGIN = 150;
-    const int LEFT_MARGIN = 100;
+    const int LEFT_MARGIN = 50;
 
     // Size of a square containing a fruit
     const int SQUARE_SIDE = 40; // give your own value here
@@ -56,7 +57,7 @@ private:
     // Number of horizontal cells (places for fruits)
     int COLUMNS = 15; // give your own value here
     const int MAX_ROWS = 20;
-    const int MAX_COLUMNS = 30;
+    const int MAX_COLUMNS = 45;
     const int MIN_ROWS = 5;
     const int MIN_COLUMNS = 5;
 
@@ -69,9 +70,13 @@ private:
     const int MAX_DELAY = 1000;
     const int MIN_DELAY = 50;
 
+    int number_of_fruits = 7;
+
+    bool additional_fruits = false;
+
     const std::vector<std::string>
             fruits = {"cherries", "strawberry", "orange", "pear",
-                      "apple", /*"bananas",*/ "grapes", "eggplant"};
+                      "apple", "grapes", "eggplant", "bananas"};
 
     // Defining where the images can be found and what kind of images they are
     const std::string PREFIX = ":/";
@@ -86,10 +91,10 @@ private:
                      ORANGE,
                      PEAR,
                      APPLE,
-                     //BANANAS,
                      GRAPES,
                      EGGPLANT,
-                     NUMBER_OF_FRUITS};
+                     BANANAS,
+                     FRUITS_LAST};
 
     // For randomly selecting fruits for the grid
     std::default_random_engine randomEng_;
@@ -120,6 +125,8 @@ private:
     void update_fruit(int x, int y);
 
     void enable_buttons(bool enable);
+
+    void drop_additional_fruits();
 
     int number_of_games = 0;
     int seconds;
