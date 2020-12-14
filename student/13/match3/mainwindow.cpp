@@ -78,6 +78,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete timer;
+    for (int i = 0; i < COLUMNS; i++)
+        for (int j = 0; j < ROWS; j++)
+            delete grid[i][j].image;
 }
 
 void MainWindow::init_grid()
@@ -92,7 +95,11 @@ void MainWindow::init_grid()
     // pitäisi toimia, mutta ei toimi
     ui->new_game_btn->setDisabled(true);
 
+    // scenen ja pixmapin deletoiminen
     if (number_of_games > 0)
+        for (int i = 0; i < COLUMNS; i++)
+            for (int j = 0; j < ROWS; j++)
+                delete grid[i][j].image;
         delete scene_;
     number_of_games++;
 
