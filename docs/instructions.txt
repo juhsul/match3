@@ -1,0 +1,228 @@
+--------------------------------------------------------------------------------
+Käyttöohjeet:
+
+Pelin tarkoituksena on yhdistää pelialueella olevia hedelmiä niin, että ne 
+muodostavat vaakatasossa tai pystytasossa kolmen tai pidemmän kokoisen jonon. 
+Pelin voi aloittaa painamalla "Uusi peli" -nappia, jolloin pelialueelle 
+muodostuu hedelmiä. Hedelmiä voi liikutella painamalla niitä. Jos pelaaja saa 
+yhdistettyä kolme tai enemmän hedelmää peräkkäin, ne poistetaan ja tippuu 
+ylhäällä olevat hedelmät alaspäin. Yhdellä liikutuksella voi poistaa useampia 
+hedelmäryppäitä. Myös putoavat hedelmät voivat pudotessaan muodostaa kolmen 
+rivejä ja ne poistuvat myös samalla kertaa.
+
+Hedelmien liikutus:
+Hedelmien liikutus tapahtuu painamalla niitä hiirellä. Ensiksi painat hedelmää, 
+jota haluat liikuttaa ja sen alle syttyy sininen valo. Sen jälkeen painat 
+jotain toista hedelmää, joka on ensimmäisen hedelmän vieressä tai päällä. 
+Ellei toinen hedelmä ole ensimmäisen vieressä tai päällä tai toinen on tyhjä, 
+mitään ei tapahtu. Jos liikutuksen seurauksena ei synny vähintään kolmen 
+pituista hedelmäjonoa, niin ei tapahdu mitään.
+
+Uusi peli:
+Uuden pelin voi aloittaa painamalla Uusi peli -nappia. Voit halutettasi säätää 
+myös pelialueen koon, erilaisten hedelmien määrän ja viiveen. Pelialueen koko 
+ja erilaisten hedelmien määrä päivittyy vasta kun olet aloittanut uuden pelin 
+säätöjen jälkeen. Viivettä voi säätää pelin aikana.
+
+Asetusten säätäminen:
+Asetuksia voi säätää peli-ikkunan yläosasta. Leveys ja korkeus säätävät 
+pelialueen mittoja. Hedelmät -slideri säätää erilaisten hedelmien määrää 
+pelialueella. Mitä enemmän erilaisia hedelmiä on, sitä vaikeampi peli on. 
+Viivettä voi säätää viive -slideristä. Viive vaikuttaa välittömästi säädön 
+jälkeen. Viiveen voi myös kokonaan ottaa pois päältä. Painamalla 
+valintaruudusta. Kun peli käynnistetään ensimmäistä kertaa on pelialueen mitat 
+15x10, joka on suositeltu koko. Kokoa voi muuttaa aina 45x20 asti, joka täyttää 
+fullHD resoluutioisen näytön kokonaan.
+
+Aika:
+Asetusten vieressä näkyy peliin kulunut aika. Aika nollaantuu aina uuden 
+pelin alussa.
+
+Huomioita pelaajille:
+Huonolla tietokoneella 45x20 kokoisen ruudukon luomiseen pienimmällä 
+mahdollisella hedelmien määrällä voi mennä muutamia sekunteja tai kymmeniä 
+sekunteja.
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Toiminta:
+Pelialue koostuu hedelmistä, joiden alla on nappi joita voi painaa.
+
+Alussa kun peli on käynnistetty ja uusi peli luotu voi hedelmiä siirrellä. 
+Hedelmien siirtely voi johtaa kolmeen eri lopputulokseen:
+	-Virheellinen siirto
+		Jos liikuteltavat hedelmät eivät ole vierekkäin tai toinen on 
+		tyhjä, ei tapahdu mitään.
+	-Siirto ilman matchia
+		Jos hedelmiä pystyy siitämään, mutta matchia ei tule, niin 
+		hedelmät vaihtavat viiveen ajaksi paikkaa, ja palaavat taas 
+		viiveen jälkeen takaisi alkuperäisille paikoilleen. Tämän 
+		liikutuksen aikana ei voi liikutella muita hedelmiä, eli 
+		pelialueen napit eivät ole käytössä.
+	-Siirto matchilla
+		Jos siirron seurauksena tulee match, niin vaihtavat hedelmät 
+		viiveen ajaksi paikkaa. Tämän jälkeen hedelmät, joita on 
+		jonossa useampi kuin kolme poistetaan. Hedelmiä voi poistaa 
+		yhdellä kerralla useampia. Voi myös poistaa samalla kertaa
+		pystysuoran ja vaakasuoran rivin jos saa samanlaisen hedelmän
+		niiden kulmaan. Esimerkit alla
+			Useampi kerralla (O-kirjaimet esittävät yhdenlaisia
+			hedelmiä ja X-kirjaimet toisenlaisia):
+			-----		-----
+			-OXO-		-OOO-
+			-XOX-	-->	-XXX-
+			-----		-----
+			Pystysuora ja vaakasuora yhdellä kertaa:
+			-----		-----
+			OOXO-		OOOX-
+			--O--	-->	--O--
+			--O--		--O--
+			-----		-----
+		Hedelmien poiston jälkeen jää poistettu alue tyhjäksi viiveen
+		ajaksi. Viiveen jälkeen tippuvat ylhäällä olevat hedelmät alas
+		päin. Tiputuksen jälkeen tarkastetaan syntyikö tiputuksessa 
+		matcheja. Jos syntyi ne poistetaan ja tiputetaan uudestaan.
+		Tarkastus matcheista tiputuksen jälkeen jatkuu kunnes niitä
+		ei enää ole. Tämän koko ajan ovat pelialueen nappulat pois
+		päältä, eli ei voi siirrellä muita hedelmiä.
+Uusi peli -nappi:
+	Uusi peli nappi luo uuden QGraphicsScenen, joka on annettujan mittojen 
+	kokoinen. Luo scenelle hedelmät satunnaisesti ja tarkastaa, että 
+	ei ole peräkkkäin kolmea hedelmää. Nollaa ajastimen. Alunperin halusin
+	uusi peli napille tehdä spämmäys-eston, mutta en onnistunut. 
+	Kooditoriossa kysyin assarilta neuvoa, ja hänkään ei osannut auttaa, 
+	joten ei kannata spämmätä että ei jää jumiin.
+Sliderit:
+	Leveys:
+		Säätää muuttujaa COLUMNS
+	Korkeus:
+		Säätää muuttujaa ROWS
+	Hedelmät:
+		Säätää muuttujaa number_of_fruits, joka vaikuttaa erilaisten
+		hedelmien määrään pelialueella.
+	Viive:
+		Säätää viivettä. Viiveen aika on se joka tapahtuu yhden 
+		siirtymä tapahtuman aikana. Hedelmien vaihdon seurauksena
+		voi tapahtua monta siirto tapahtumaa. Eli esim. jos 
+		tiputuksessa syntyy matcheja, niin hedelmien siirrosta 
+		seuraavaan siirron alkuun ei aina ole sama aika.
+Viive check box:
+	Voi kytkeä viiveen kokonaan pois päältä.
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Ohjelman rakenne:
+
+Ohjelma koostuu monesta funktiosta, joista hedelmien liikuttelun kannalta on 
+kaksi "pääfunktiota", jotka suorittavat suuren osan asioista ja ne kutsuvat 
+muita funktioita. Nämä ovat:
+	init_grid
+	on_fruit_click
+Nämä funktiot kutsuvat seuraavia funktioita:
+	init_grid
+		scene_add_item
+		init_3btb
+			scene_add_item
+	on_fruit_click
+		enable_buttons
+		try_change_fruits
+			try_remove_3btb
+				delete_3btb
+		drop_fruits
+			try_remove_3btb
+				delete_3btb
+Pieni kuvaus funktioista:
+init_grid:
+	Uusi peli-nappulaa painettaessa nollaa ajastimen, luo scenen, 
+	hedelmät ja hedelmien alle nappulat. Lopuksi tarkastaa onko 
+	"matcheja" syntynyt jo luontivaiheessa. Jos on niin korjaa 
+	tilanteen. Funktion alussa ja lopussa ovat aikaisemmin kertomani
+	spämmäys-esto koodit tallella, mutta ne eivät toimi. Assarilta
+	kysyin neuvoa korjaamiseen, mutta ei saatu toimimaan ja sanoi että
+	on pieni vika.
+scene_add_item:
+	Lisää sceneen kuvan
+init_3btb
+	Tarkkastaa onko luontivaiheessa tullut valmiiksi kolmea peräkkäistä. 
+	Jos on niin luo tilalle uuden hedelmän. Jos korjaus on tehty, niin 
+	tarkastetaan uudelleen onko peräkkäisiä kolmea hedelmää. 
+	Uudelleentarkastus tehdään niin kauan, kun ei enää löydy peräkkäisiä 
+	kolmea. Tällä saadaan poissulkea korjauksessa tapahtuneet virheelliset 
+	korjaukset. Virheellisiä korjauksia voi tulla, koska tarkastus tehdään 
+	ensin vaakarivillä, sen jälkeen pystyrivillä, joten jos pystyriviltä 
+	korjaa, voi vahingossa luoda vaakariville matchin.
+on_fruit_click
+	Ottaa pelialueen nappulat pois päältä ja palauttaa ne vasta kun 
+	pelialuetta voi taas siirrellä. Tarkastaa onko joku pelialueen 
+	napeista jo painettu entuudeltaan, jos ei ole, niin merkitsee
+	kyseisen napin painetuksi. Jos löytyy aikaisemmin painettu
+	kutsuu funktiota try_change_fruits
+try_change_fruits
+	Tarkastaa onko painetut painallukset laillisia. Jos on vaihtaa 
+	hedelmien paikkkaa. Kutsuu funktiota try_remove_3btb. Tämän 
+	funktion paluuarvolla, joko siirretään hedelmät takaisin 
+	alkuperäisille paikoilleen tai jatketaan pudotukseen.
+try_remove_fruits
+	Laskee onko kolmea samaa hedelmää vierekkäin, jos on niin kutsuu
+	funktiota delete_3btb.
+delete_3btb
+	Poistaa hedelmät
+drop_fruits
+	Käy läpi kaikki sarakkeet ja pudottaa hedelmät. Tämän jälkeen 
+	tarkastaa onko uusia matcheja.
+		
+Lisäksi on muutama funktio tai slotti widgeteille.
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Lisäominaisuudet:
+2. Viiveen valitseminen
+3. Mahdollisuus valita peliruudukon koko
+4. Pelin aikana kerrotaan siihen mennessä kulunut aika
+6. Jos vaihdon seurauksena löytyy enemmän kuin kolme samanlaista hedelmää
+8. Peliasetelman voi palauttaa alkutilanteeseen
+10. Neliöiden sijasta hedelmät näyttävät oikkeilta hedelmiltä
+11. Vaihdettavat hedelmät valitaan klikkaamalla niitä
+
+Lisäominaisuutena myös tein hedelmien määrän valitsemisen, vaikka sitä ei ollut 
+lisäominaisuuksien listalla. Käsitykseni mukaan myös pudotuksen jälkeinen
+matchien tarkastelu on jonkinlainen ekstra. Perusvaatimuksissa ei näkynyt 
+mainintaa siitä, eikä myöskään lisäominaisuuksien listalla.
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Suunnittelupäätökset:
+
+Mitään varsinaisia suunnitelmia en tehnyt projektista. Lähdin hyvillä mielin 
+vähän testailemaan viikkoa ennen projektin palautusta, että mitenköhän se 
+lähtisi liikkeelle ja aloitin hedelmien laittamisesta peliruudulle. 
+Myöhemmin huomasin, että se ei ollut edes pakollinen vaatimus. Jatkoin eteen 
+päin yksi vaihe kerrallaan. Nyt kun tätä kirjoittaa ja myöskin ohjelmointi-
+vaiheissa huomasi että pieni suunnittelu funktioiden kanssa olisi ollut 
+ihan hyväksi, mutta ei se nytkään paha ole omasta mielestäni. Myöskin kun 
+ollaan kuitenkin opettelemassa vasta ohjelmointia, niin ehkä lopullinen 
+toteutus ja tieto siitä minkälainen ohjelma tulee olemaan rakenteeltaan 
+ei ihan heti ole mielessä. Mutta tulevaisuutta ajatellen suunnittelu ja 
+tehtävänannon lukeminen kunnolla ei ainakaan haittaa. Voi olla jopa 
+hyödyksi. Kommentoinnin hyödytkin tuli huomattua itse. Kun tätä projektia 
+on nyt tullu tehtyä useampi päivä, niin siinä kerkeää unohtamaan jo mitä 
+jotkut koodinpätkät tekee. Yleensä projektit on tullut tehtyä yhdessä 
+päivässä ja ne ovat olleet lyhyempiä, niin siinä muistaa aika hyvin mitä 
+kaikki tekee ja kommentoi vasta lopuksi että saa pisteet. Tässä kun rivejä 
+on päälle 500 niin kerkeää jo unohtamaan oman koodin ja pitää miettiä 
+uudestaan että voi laittaa kommentit.
